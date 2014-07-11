@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.Size;
-import android.util.Log;
 import android.view.SurfaceHolder;
 
 import com.viniciusdsl.cameraview.library.instrumentation.CameraOptimalSizeHelper;
@@ -92,7 +91,6 @@ public class CameraHardwareController {
 	public void startPreview() {
 		if (cameraDevice != null && !cameraPreviewStatus
 				&& !cameraTakingPictureStatus) {
-            Log.d("ehhh","works :)");
 			try {
 				Camera.Parameters parameters = cameraDevice.getParameters();
 				parameters.setPreviewSize(cameraPreviewSize.width,
