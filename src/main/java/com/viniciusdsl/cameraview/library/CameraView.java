@@ -117,11 +117,17 @@ public class CameraView extends SurfaceView {
     public boolean getCameraOpenError(){
         return cameraViewController.getOpenCameraError();
     }
-
+    
+    /**
+     * <p>This method reset the camera.</p>
+     */
     public void resetCamera(){
         cameraViewController.resetCamera();
     }
 
+     /**
+     * <p>This method release the camera.</p>
+     */
     public void releaseCamera(){
         cameraViewController.releaseCameraAndPreview();
     }
