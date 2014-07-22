@@ -1,4 +1,4 @@
-package com.viniciusdsl.cameraview.library.controller;
+package com.viniciusdsl.library.controller;
 
 
 
@@ -7,13 +7,12 @@ import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.view.SurfaceHolder;
 
-import com.viniciusdsl.cameraview.library.CameraView;
-import com.viniciusdsl.cameraview.library.listener.CameraListener;
-
+import com.viniciusdsl.library.CameraView;
+import com.viniciusdsl.library.listener.CameraListener;
 
 /**
  * @author Vinicius DSL
- * @version 0.1
+ * @version 0.2
  * <p>The controller of the view that display the camera.</p>
  */
 
@@ -68,18 +67,11 @@ public class CameraViewController extends CameraHardwareController implements
 	@Override
 	public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {
 		// TODO Auto-generated method stub
-
-		if (getPreviewStatus()) {
-			stopPreview();
-		}
-		setHolder(cameraHolder);
-		configureCameraFromLastId();
-		startPreview();
-
+        resetCamera();
 	}
 
 	/**
-	 * <p>Here we open the camera, if the device only have front camera (tablets)
+	 * <p>This method open the camera, if the device only have front camera (tablets)
      * this will be open.</p>
 	 */
 	@Override
@@ -99,7 +91,7 @@ public class CameraViewController extends CameraHardwareController implements
 	}
 
 	/**
-	 * <p>To destroy the camera when the holder is destroyed.</p>
+	 * <p>This method destroy the camera when the holder is destroyed.</p>
 	 */
 	@Override
 	public void surfaceDestroyed(SurfaceHolder arg0) {
@@ -107,5 +99,17 @@ public class CameraViewController extends CameraHardwareController implements
 
 		destroyCamera();
 	}
+
+    /**
+     * <p>This method reset the camera.</p>
+     */
+    public void resetCamera(){
+        if (getPreviewStatus()) {
+            stopPreview();
+        }
+        setHolder(cameraHolder);
+        configureCameraFromLastId();
+        startPreview();
+    }
 
 }

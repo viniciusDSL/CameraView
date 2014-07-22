@@ -1,10 +1,10 @@
-package com.viniciusdsl.cameraview.library.listener;
+package com.viniciusdsl.library.listener;
 
 import android.graphics.Bitmap;
 
 /**
  * @author Vinicius DSL 
- * @version 0.1
+ * @version 0.2
  * <p>Interface of the camera listener.</p>
  */
 

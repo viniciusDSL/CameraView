@@ -1,11 +1,11 @@
-package com.viniciusdsl.cameraview.library.instrumentation;
+package com.viniciusdsl.library.instrumentation;
+
+import java.util.List;
 
 import android.content.Context;
 import android.hardware.Camera;
 import android.view.Surface;
 import android.view.WindowManager;
-
-import java.util.List;
 
 /**
  * @author Vinicius DSL

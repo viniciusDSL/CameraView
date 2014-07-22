@@ -1,4 +1,9 @@
-package com.viniciusdsl.cameraview.library.controller;
+package com.viniciusdsl.library.controller;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.List;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,17 +13,12 @@ import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.Size;
 import android.view.SurfaceHolder;
 
-import com.viniciusdsl.cameraview.library.instrumentation.CameraOptimalSizeHelper;
-import com.viniciusdsl.cameraview.library.listener.CameraListener;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.List;
+import com.viniciusdsl.library.instrumentation.CameraOptimalSizeHelper;
+import com.viniciusdsl.library.listener.CameraListener;
 
 /**
  * @author Vinicius DSL
- * @version 0.1
+ * @version 0.2
  * <p>The controller of the camera's hardware here have a composite
  * because can't extend the Hardware Camera class.</p>
  */
@@ -33,7 +33,7 @@ public class CameraHardwareController {
 	private Size cameraPreviewSize;
 	private int cameraWidth;
 	private int cameraHeight;
-	private int currentCameraId;
+	private int currentCameraId = - 1;
     private boolean openCameraError;
 
 	/**
@@ -91,13 +91,14 @@ public class CameraHardwareController {
 	public void startPreview() {
 		if (cameraDevice != null && !cameraPreviewStatus
 				&& !cameraTakingPictureStatus) {
+
 			try {
+                cameraPreviewStatus = true;
 				Camera.Parameters parameters = cameraDevice.getParameters();
 				parameters.setPreviewSize(cameraPreviewSize.width,
 						cameraPreviewSize.height);
 				cameraDevice.setParameters(parameters);
 				cameraDevice.startPreview();
-				cameraPreviewStatus = true;
 
 			} catch (Exception e) {
 				if (cameraListener != null) {
@@ -116,9 +117,8 @@ public class CameraHardwareController {
 		if (cameraDevice != null && cameraPreviewStatus) {
 
 			try {
-
+                cameraPreviewStatus = false;
 				cameraDevice.stopPreview();
-				cameraPreviewStatus = false;
 
 			} catch (Exception e) {
 				if (cameraListener != null) {
@@ -137,12 +137,12 @@ public class CameraHardwareController {
      * @param cameraId is the id of the camera(front camera,back camera,etc)
 	 */
 	public void openCameraID(int cameraId) {
-        currentCameraId = cameraId;
         openCameraError = false;
         try {
             releaseCameraAndPreview();
             cameraDevice = Camera.open(cameraId);
             cameraPreviewStatus = true;
+            currentCameraId = cameraId;
             configureCameraFromLastId();
         } catch (Exception e) {
             e.printStackTrace();
@@ -200,17 +200,18 @@ public class CameraHardwareController {
 					filePath = null;
 					if (cameraListener != null) {
 						cameraListener.onCameraPictureFailed(e);
-                        cameraTakingPictureStatus = false;
 						return;
 					}
+                    if(cameraListener!=null) {
+                        cameraListener.onCameraPictureFailed(e);
+                    }
 				}
 
 				if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.GINGERBREAD_MR1) {
 					// only for gingerbread and newer versions
 					stopPreview();
 				}
-                cameraPreviewStatus = false;
-                cameraTakingPictureStatus = false;
+
 				if (filePath != null) {
 					Bitmap pictureBitmap = BitmapFactory.decodeByteArray(bytes,
 							0, bytes.length);
@@ -220,6 +221,7 @@ public class CameraHardwareController {
 						return;
 					}
 				}
+				cameraTakingPictureStatus = false;
 			}
 		};
         try {
@@ -258,13 +260,15 @@ public class CameraHardwareController {
     /**
      * <p>This method release the camera.</p>
      */
-    private void releaseCameraAndPreview() {
+    public void releaseCameraAndPreview() {
         if (cameraDevice != null) {
+            cameraDevice.setPreviewCallback(null);
+            cameraDevice.lock();
             cameraDevice.release();
             cameraDevice = null;
+            cameraPreviewStatus = false;
+            cameraTakingPictureStatus = false;
         }
+        cameraPreviewStatus = false;
     }
-
-
-
 }

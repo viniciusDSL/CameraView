@@ -1,17 +1,16 @@
-package com.viniciusdsl.cameraview.library;
+package com.viniciusdsl.library;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.SurfaceView;
 
-import com.viniciusdsl.cameraview.library.controller.CameraViewController;
-import com.viniciusdsl.cameraview.library.listener.CameraListener;
-
+import com.viniciusdsl.library.controller.CameraViewController;
+import com.viniciusdsl.library.listener.CameraListener;
 
 /**
  * @author Vinicius DSL
- * @version 0.1
+ * @version 0.2
  * <p>The widget that can use directly to the layout.</p>
  */
 
@@ -117,5 +116,13 @@ public class CameraView extends SurfaceView {
      */
     public boolean getCameraOpenError(){
         return cameraViewController.getOpenCameraError();
+    }
+
+    public void resetCamera(){
+        cameraViewController.resetCamera();
+    }
+
+    public void releaseCamera(){
+        cameraViewController.releaseCameraAndPreview();
     }
 }
