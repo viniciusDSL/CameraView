@@ -2,7 +2,7 @@ Camera Library for android
 ==========================
 
 * Use the Camera like a simple widget in android
-* v 0.1
+* v 0.2
 
 # Usage
 
